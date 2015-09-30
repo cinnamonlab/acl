@@ -1,0 +1,23 @@
+{
+    "name": "cinnamonlab/acl",
+    "description": "The Simple Framework acl Wrapper",
+    "type": "library",
+    "keywords": ["framework"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hieu Trieu",
+            "email": "mrhieutrieu@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "cinnamonlab/framework": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Framework\\ACL\\": "src/Framework/ACL/"
+        }
+    }
+}
