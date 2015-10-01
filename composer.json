@@ -2,7 +2,6 @@
     "name": "cinnamonlab/acl",
     "description": "The Simple Framework acl Wrapper",
     "type": "library",
-    "minimum-stability": "stable",
     "keywords": ["framework"],
     "license": "MIT",
     "authors": [
