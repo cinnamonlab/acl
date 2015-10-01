@@ -8,6 +8,10 @@ namespace Framework\ACL;
  * Time: 9:42 PM
  */
 class Acl {
+    const ACCESS_DENY = 0;
+    const ACCESS_ALLOW = 1;
+
+    protected $_defaultAccess = true;
     /**
      * Roles Names
      *
@@ -63,6 +67,9 @@ class Acl {
      */
     public function __construct() {}
 
+    public function setDefaultAction($value){
+        $this->_defaultAccess = $value;
+    }
     /**
      * Adds a role to the ACL list. Second parameter allows inheriting access data from other existing role
      * Example:
@@ -154,11 +161,11 @@ class Acl {
             if (is_array($accessList)) {
                 foreach ($accessList as $index => $access) {
                     $this->_accessList[$resourceName . '!' . $access] = 1;
-                    $this->_access[$roleName.'!'.$resourceName . '!' . $access] = 0;
+                    $this->_access[$roleName.'!'.$resourceName . '!' . $access] = $this->_defaultAccess;
                 }
             } else {
                 $this->_accessList[$resourceName . '!' . $accessList] = 1;
-                $this->_access[$roleName.'!'.$resourceName . '!' . $accessList] = 0;
+                $this->_access[$roleName.'!'.$resourceName . '!' . $accessList] = $this->_defaultAccess;
             }
         }
     }
@@ -202,7 +209,7 @@ class Acl {
      */
     public function allow($roleName, $resourceName, $access) {
         $accessName = $roleName.'!'.$resourceName.'!'.$access;
-        $this->_access[$accessName] = 1;
+        $this->_access[$accessName] = self::ACCESS_ALLOW;
     }
 
     /**
@@ -226,7 +233,7 @@ class Acl {
      */
     public function deny($roleName, $resourceName, $access) {
         $accessName = $roleName.'!'.$resourceName.'!'.$access;
-        $this->_access[$accessName] = 0;
+        $this->_access[$accessName] = self::ACCESS_DENY;
     }
 
     /**
@@ -245,7 +252,7 @@ class Acl {
      */
     public function isAllowed($roleName, $resourceName, $access) {
         $accessName = $roleName.'!'.$resourceName.'!'.$access;
-        return $this->_access[$accessName];
+        return isset($this->_access[$accessName])?$this->_access[$accessName]:0;
     }
 
     /**
