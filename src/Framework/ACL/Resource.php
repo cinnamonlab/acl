@@ -2,6 +2,13 @@
 
 namespace Framework\ACL;
 
+/**
+ * Created by PhpStorm.
+ * User: HIEUTRIEU
+ * Date: 9/30/2015
+ * Time: 9:42 PM
+ */
+
 class Resource implements ResourceInterface
 {
     /**
@@ -24,7 +31,9 @@ class Resource implements ResourceInterface
      *
      * @return string 
      */
-	public function getName() {}
+	public function getName() {
+        return $this->_name;
+    }
 
     /**
      * Resource name
@@ -36,7 +45,9 @@ class Resource implements ResourceInterface
      *
      * @return string 
      */
-	public function getDescription() {}
+	public function getDescription() {
+        return $this->_description;
+    }
 
     /**
      * Framework\ACL\Resource constructor
@@ -44,6 +55,9 @@ class Resource implements ResourceInterface
      * @param string $name 
      * @param string $description 
      */
-	public function __construct($name, $description = null) {}
+	public function __construct($name, $description = null) {
+        $this->_name = $name;
+        $this->_description = $description;
+    }
 
 }

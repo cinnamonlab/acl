@@ -76,7 +76,13 @@ class Acl {
      * @return bool
      */
     public function addRole($role, $accessInherits = null) {
-        $this->_roles[] = $role;
+        if(is_object($role)) {
+            $this->_rolesNames[$role->getName()] = 1;
+            $this->_roles[] = $role;
+        } else {
+            $this->_rolesNames[$role] = 1;
+            $this->_roles[] = new Role($role);
+        }
     }
 
     /**
@@ -93,7 +99,9 @@ class Acl {
      * @param string $roleName
      * @return bool
      */
-    public function isRole($roleName) {}
+    public function isRole($roleName) {
+        return in_array($roleName, $this->_roles);
+    }
 
     /**
      * Check whether resource exist in the resources list
@@ -121,7 +129,18 @@ class Acl {
      * @param array|string $accessList
      * @return bool
      */
-    public function addResource($resourceValue, $accessList) {}
+    public function addResource($resourceValue, $accessList) {
+        if(is_object($resourceValue)) {
+            $this->_resourcesNames[$resourceValue->getName()] = 1;
+            $this->_resources[] = $resourceValue;
+            $resourceName = $resourceValue->getName();
+        } else {
+            $this->_resourcesNames[$resourceValue] = 1;
+            $this->_resources[] = new Resource($resourceValue);
+            $resourceName = $resourceValue;
+        }
+        $this->addResourceAccess($resourceName, $accessList);
+    }
 
     /**
      * Adds access to resources
@@ -130,7 +149,19 @@ class Acl {
      * @param array|string $accessList
      * @return bool
      */
-    public function addResourceAccess($resourceName, $accessList) {}
+    public function addResourceAccess($resourceName, $accessList) {
+        foreach($this->_rolesNames as $roleName => $value) {
+            if (is_array($accessList)) {
+                foreach ($accessList as $index => $access) {
+                    $this->_accessList[$resourceName . '!' . $access] = 1;
+                    $this->_access[$roleName.'!'.$resourceName . '!' . $access] = 0;
+                }
+            } else {
+                $this->_accessList[$resourceName . '!' . $accessList] = 1;
+                $this->_access[$roleName.'!'.$resourceName . '!' . $accessList] = 0;
+            }
+        }
+    }
 
     /**
      * Removes an access from a resource
@@ -169,7 +200,10 @@ class Acl {
      * @param string $resourceName
      * @param mixed $access
      */
-    public function allow($roleName, $resourceName, $access) {}
+    public function allow($roleName, $resourceName, $access) {
+        $accessName = $roleName.'!'.$resourceName.'!'.$access;
+        $this->_access[$accessName] = 1;
+    }
 
     /**
      * Deny access to a role on a resource
@@ -190,7 +224,10 @@ class Acl {
      * @param string $resourceName
      * @param mixed $access
      */
-    public function deny($roleName, $resourceName, $access) {}
+    public function deny($roleName, $resourceName, $access) {
+        $accessName = $roleName.'!'.$resourceName.'!'.$access;
+        $this->_access[$accessName] = 0;
+    }
 
     /**
      * Check whether a role is allowed to access an action from a resource
@@ -206,7 +243,10 @@ class Acl {
      * @param string $access
      * @return bool
      */
-    public function isAllowed($roleName, $resourceName, $acces) {}
+    public function isAllowed($roleName, $resourceName, $access) {
+        $accessName = $roleName.'!'.$resourceName.'!'.$access;
+        return $this->_access[$accessName];
+    }
 
     /**
      * Return an array with every role registered in the list
@@ -222,6 +262,8 @@ class Acl {
      *
      * @return \Resource[]
      */
-    public function getResources() {}
+    public function getResources() {
+        return $this->_resources;
+    }
 
 }

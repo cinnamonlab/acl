@@ -2,6 +2,12 @@
 
 namespace Framework\ACL;
 
+/**
+ * Created by PhpStorm.
+ * User: HIEUTRIEU
+ * Date: 9/30/2015
+ * Time: 9:42 PM
+ */
 class Role implements RoleInterface
 {
     /**
@@ -24,7 +30,9 @@ class Role implements RoleInterface
      *
      * @return string 
      */
-	public function getName() {}
+	public function getName() {
+        return $this->_name;
+    }
 
     /**
      * Role name
@@ -36,7 +44,9 @@ class Role implements RoleInterface
      *
      * @return string 
      */
-	public function getDescription() {}
+	public function getDescription() {
+        return $this->_description;
+    }
 
     /**
      * Framework\Acl\Role constructor
@@ -44,6 +54,9 @@ class Role implements RoleInterface
      * @param string $name 
      * @param string $description 
      */
-	public function __construct($name, $description = null) {}
+	public function __construct($name, $description = null) {
+        $this->_name = $name;
+        $this->_description = $description;
+    }
 
 }
