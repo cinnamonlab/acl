@@ -7,7 +7,7 @@ namespace Framework\ACL;
  * Date: 9/30/2015
  * Time: 9:42 PM
  */
-class Acl {
+class ACL {
     const ACCESS_DENY = 0;
     const ACCESS_ALLOW = 1;
 
